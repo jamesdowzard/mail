@@ -3,5 +3,10 @@
   "description": "Self-hosted email infrastructure for dowzard.family",
   "max_parallel_agents": 3,
   "checkpoint_after_each_step": true,
-  "created_at": "2025-12-26T09:30:00Z"
+  "created_at": "2025-12-26T09:30:00Z",
+  "branching_strategy": {
+    "rule": "NEVER commit directly to main - ALL changes go through feature branches",
+    "personal_repos": "feature/description → merge to main → tag for releases",
+    "work_repos": "feature/description off develop → merge to develop → develop to main for releases"
+  }
 }
