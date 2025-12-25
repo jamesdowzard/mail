@@ -1,0 +1,24 @@
+# Environment files with secrets
+.env
+*.env.local
+
+# Stalwart data (backed up separately)
+data/
+
+# Certificates (managed by certbot)
+certs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Worktrees (managed by harness)
+.worktrees/
