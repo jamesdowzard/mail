@@ -10,8 +10,11 @@ Self-hosted email for `dowzard.family` using [Stalwart Mail Server](https://stal
 | Domain Config | dowzard.family configured |
 | User Account | james@dowzard.family |
 | IMAP Access | Working (internal) |
-| External Receiving | Not configured |
-| External Sending | Not configured |
+| DNS Records | MX, SPF, DMARC, DKIM configured |
+| Port Forwarding | DMZ to Pi (ISP may block port 25) |
+| AWS SES | Domain verified, DKIM active |
+| External Sending | Pending (configure relay in Stalwart) |
+| External Receiving | Pending (Cloudflare Email Routing) |
 
 ## Quick Start
 

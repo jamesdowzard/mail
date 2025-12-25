@@ -1,26 +1,28 @@
 {
   "project": "mail",
   "created_at": "2025-12-26T09:30:00Z",
-  "updated_at": "2025-12-26T09:30:00Z",
-  "phase": "planning",
+  "updated_at": "2025-12-26T11:30:00Z",
+  "phase": "implementation",
   "features": [
     {
       "id": "docker-config",
       "name": "Docker Configuration",
-      "description": "Migrate Stalwart docker-compose to repo with proper config, volumes, and environment",
-      "status": "pending",
+      "description": "Stalwart docker-compose running on Pi at ~/stalwart/",
+      "status": "complete",
       "priority": 1,
       "dependencies": [],
-      "files": ["docker/docker-compose.yml", "docker/stalwart.toml", "docker/.env.example"]
+      "files": ["docker/docker-compose.yml", "docker/.env.example"],
+      "notes": "Running at 192.168.0.58:8093 with user james@dowzard.family"
     },
     {
       "id": "dns-records",
       "name": "DNS Records Setup",
-      "description": "Configure Cloudflare DNS: MX record, SPF, DKIM, DMARC for dowzard.family",
-      "status": "pending",
+      "description": "MX, SPF, DMARC configured in Cloudflare for dowzard.family",
+      "status": "complete",
       "priority": 2,
       "dependencies": ["docker-config"],
-      "files": ["dns/records.md", "dns/setup-dns.sh"]
+      "files": ["dns/records.md"],
+      "notes": "MX→mail.dowzard.family, A→49.176.51.236, SPF includes amazonses.com"
     },
     {
       "id": "ssl-certs",
@@ -29,25 +31,27 @@
       "status": "pending",
       "priority": 3,
       "dependencies": ["dns-records"],
-      "files": ["docker/certbot-config.yml", "scripts/renew-certs.sh"]
+      "files": ["scripts/renew-certs.sh"]
     },
     {
       "id": "port-forwarding",
       "name": "Port Forwarding",
-      "description": "Document and configure router port forwarding for SMTP/IMAP ports",
-      "status": "pending",
+      "description": "DMZ rule on router forwards all ports to Pi (192.168.0.58)",
+      "status": "complete",
       "priority": 4,
-      "dependencies": ["ssl-certs"],
-      "files": ["docs/port-forwarding.md"]
+      "dependencies": [],
+      "files": ["docs/port-forwarding.md"],
+      "notes": "DMZ configured. ISP likely blocks port 25 inbound. Use Cloudflare Email Routing for receiving."
     },
     {
       "id": "sending-config",
       "name": "Outbound Email Setup",
-      "description": "Configure direct sending or SMTP relay (Mailgun/SES) for deliverability",
-      "status": "pending",
+      "description": "AWS SES configured - domain verified, DKIM active, SMTP credentials ready",
+      "status": "in_progress",
       "priority": 5,
       "dependencies": ["dns-records"],
-      "files": ["docker/relay-config.toml", "docs/sending-setup.md"]
+      "files": ["docs/ses-setup.md"],
+      "notes": "SES domain verified & DKIM active. Credentials in ~/.credentials/stalwart.env. TODO: Configure Stalwart relay at Settings > SMTP > Outbound > Routing - add relay host ses-relay with SES credentials."
     },
     {
       "id": "spam-filtering",
