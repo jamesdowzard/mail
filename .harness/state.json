@@ -1,7 +1,7 @@
 {
   "project": "mail",
   "created_at": "2025-12-26T09:30:00Z",
-  "updated_at": "2025-12-26T11:30:00Z",
+  "updated_at": "2025-12-26T12:15:00Z",
   "phase": "implementation",
   "features": [
     {
@@ -22,7 +22,7 @@
       "priority": 2,
       "dependencies": ["docker-config"],
       "files": ["dns/records.md"],
-      "notes": "MX→mail.dowzard.family, A→49.176.51.236, SPF includes amazonses.com"
+      "notes": "MX→Cloudflare Email Routing (route1/2/3.mx.cloudflare.net), SPF includes _spf.mx.cloudflare.net and amazonses.com"
     },
     {
       "id": "ssl-certs",
@@ -52,6 +52,16 @@
       "dependencies": ["dns-records"],
       "files": ["docs/ses-setup.md"],
       "notes": "SES relay configured in Stalwart config.toml. Route: ses-relay → email-smtp.ap-southeast-2.amazonaws.com:587. queue.outbound.next-hop = ses-relay. SES in sandbox mode (200 emails/day, verified addresses only)."
+    },
+    {
+      "id": "inbound-routing",
+      "name": "Inbound Email Routing",
+      "description": "Cloudflare Email Routing forwards inbound mail to Gmail",
+      "status": "complete",
+      "priority": 5,
+      "dependencies": ["dns-records"],
+      "files": ["docs/cloudflare-email-routing.md"],
+      "notes": "james@dowzard.family → james.dowzard@gmail.com via Cloudflare Email Routing. ISP blocks port 25 so direct SMTP receiving not possible."
     },
     {
       "id": "spam-filtering",
