@@ -1,6 +1,6 @@
 # AWS SES Setup for Stalwart Mail
 
-## Status: Domain Verified, DKIM Active
+## Status: COMPLETE - Relay Configured
 
 The dowzard.family domain is configured in AWS SES (ap-southeast-2 region) for sending email.
 
@@ -29,25 +29,36 @@ Stored in `~/.credentials/stalwart.env`:
 | Username | AKIAZKW2QXIE42HGHOIC |
 | Password | (see SES_SMTP_PASSWORD in credentials file) |
 
-## Stalwart Configuration (TODO)
+## Stalwart Configuration (COMPLETE)
 
-Configure Stalwart to use SES as the SMTP relay:
+SES relay configured in `/opt/stalwart/etc/config.toml` on the Pi:
 
-1. Open Stalwart admin: http://192.168.0.58:8093
-2. Login as admin
-3. Navigate to: Settings > SMTP > Outbound > Routing
-4. Click "+ Create route"
-5. Configure:
-   - **ID**: `ses-relay`
-   - **Type**: Relay Host
-   - **Description**: AWS SES SMTP Relay
-   - **Address**: `email-smtp.ap-southeast-2.amazonaws.com`
-   - **Port**: `587`
-   - **Protocol**: SMTP
-   - **Implicit TLS**: Off (uses STARTTLS)
-   - **Username**: `AKIAZKW2QXIE42HGHOIC`
-   - **Secret**: (from SES_SMTP_PASSWORD in credentials)
-6. Save changes
+```toml
+# AWS SES SMTP Relay
+[queue.route.ses-relay]
+type = "relay"
+description = "AWS SES SMTP Relay"
+address = "email-smtp.ap-southeast-2.amazonaws.com"
+port = 587
+protocol = "smtp"
+
+[queue.route.ses-relay.tls]
+implicit = false
+
+[queue.route.ses-relay.auth]
+username = "AKIAZKW2QXIE42HGHOIC"
+secret = "<from SES_SMTP_PASSWORD in credentials>"
+
+# Route external mail through SES relay
+[queue.outbound]
+next-hop = "ses-relay"
+```
+
+Verify via API:
+```bash
+curl -s -u admin:PASSWORD "http://192.168.0.58:8093/api/settings/list?prefix=queue.route.ses-relay" | jq
+curl -s -u admin:PASSWORD "http://192.168.0.58:8093/api/settings/list?prefix=queue.outbound" | jq
+```
 
 ## Verification
 

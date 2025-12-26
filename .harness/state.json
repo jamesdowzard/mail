@@ -46,12 +46,12 @@
     {
       "id": "sending-config",
       "name": "Outbound Email Setup",
-      "description": "AWS SES configured - domain verified, DKIM active, SMTP credentials ready",
-      "status": "in_progress",
+      "description": "AWS SES configured as SMTP relay for outbound mail",
+      "status": "complete",
       "priority": 5,
       "dependencies": ["dns-records"],
       "files": ["docs/ses-setup.md"],
-      "notes": "SES domain verified & DKIM active. Credentials in ~/.credentials/stalwart.env. TODO: Configure Stalwart relay at Settings > SMTP > Outbound > Routing - add relay host ses-relay with SES credentials."
+      "notes": "SES relay configured in Stalwart config.toml. Route: ses-relay → email-smtp.ap-southeast-2.amazonaws.com:587. queue.outbound.next-hop = ses-relay. SES in sandbox mode (200 emails/day, verified addresses only)."
     },
     {
       "id": "spam-filtering",
